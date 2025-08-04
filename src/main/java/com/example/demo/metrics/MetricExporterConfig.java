@@ -24,7 +24,7 @@ public class MetricExporterConfig {
         .build();
   }
 
-  public static MetricExporter logginMetricExporter() {
+  public static MetricExporter loggingMetricExporter() {
     return LoggingMetricExporter.create();
   }
 
