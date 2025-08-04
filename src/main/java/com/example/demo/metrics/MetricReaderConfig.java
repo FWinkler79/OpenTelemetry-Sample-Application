@@ -8,7 +8,7 @@ import java.time.Duration;
 
 public class MetricReaderConfig {
   public static MetricReader periodicMetricReader(MetricExporter metricExporter) {
-    return PeriodicMetricReader.builder(metricExporter).setInterval(Duration.ofSeconds(10)).build();
+    return PeriodicMetricReader.builder(metricExporter).setInterval(Duration.ofSeconds(5)).build();
   }
 
   public static MetricReader prometheusMetricReader() {
