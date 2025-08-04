@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.traces;
 
 import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;

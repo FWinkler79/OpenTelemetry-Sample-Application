@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.metrics;
 
 import io.opentelemetry.exporter.logging.LoggingMetricExporter;
 import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingMetricExporter;

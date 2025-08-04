@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.traces;
 
 import io.opentelemetry.api.baggage.propagation.W3CBaggagePropagator;
 import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.logs;
 
 import io.opentelemetry.sdk.common.CompletableResultCode;
 import io.opentelemetry.sdk.logs.data.LogRecordData;

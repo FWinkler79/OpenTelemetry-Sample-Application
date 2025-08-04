@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.traces;
 
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.propagation.TextMapGetter;

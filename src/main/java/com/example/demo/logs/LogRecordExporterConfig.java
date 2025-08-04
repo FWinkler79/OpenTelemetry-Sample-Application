@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.logs;
 
 import io.opentelemetry.exporter.logging.SystemOutLogRecordExporter;
 import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingLogRecordExporter;

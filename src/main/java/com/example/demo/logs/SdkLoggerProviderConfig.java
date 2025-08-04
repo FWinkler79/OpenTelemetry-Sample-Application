@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.logs;
 
 import io.opentelemetry.sdk.logs.SdkLoggerProvider;
 import io.opentelemetry.sdk.resources.Resource;

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.logs;
 
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.context.Context;

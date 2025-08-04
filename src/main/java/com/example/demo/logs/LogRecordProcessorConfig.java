@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.logs;
 
 import io.opentelemetry.sdk.logs.LogRecordProcessor;
 import io.opentelemetry.sdk.logs.export.BatchLogRecordProcessor;

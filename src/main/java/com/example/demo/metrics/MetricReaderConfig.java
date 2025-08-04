@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.metrics;
 
 import io.opentelemetry.exporter.prometheus.PrometheusHttpServer;
 import io.opentelemetry.sdk.metrics.export.MetricExporter;

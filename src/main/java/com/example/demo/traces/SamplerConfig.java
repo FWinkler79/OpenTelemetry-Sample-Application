@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.traces;
 
 import io.opentelemetry.sdk.extension.trace.jaeger.sampler.JaegerRemoteSampler;
 import io.opentelemetry.sdk.trace.samplers.Sampler;

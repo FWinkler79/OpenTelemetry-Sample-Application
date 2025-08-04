@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.metrics;
 
 import io.opentelemetry.sdk.common.CompletableResultCode;
 import io.opentelemetry.sdk.common.export.MemoryMode;

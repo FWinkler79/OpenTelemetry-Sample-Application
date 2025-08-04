@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.traces;
 
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
