@@ -9,7 +9,7 @@
 		<relativePath/>
 		<!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.sap.opentelemetry</groupId>
+	<groupId>com.exampled.opentelemetry</groupId>
 	<artifactId>demo-application</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>demo-application</name>
