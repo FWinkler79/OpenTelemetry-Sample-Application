@@ -8,3 +8,13 @@ services:
       - "4318:4318"
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: demo
+    ports:
+      - "5432:5432"
