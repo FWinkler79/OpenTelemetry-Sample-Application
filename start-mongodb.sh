@@ -5,6 +5,6 @@
 set -e
 
 echo "Starting MongoDB database using docker-compose..."
-docker-compose up mongodb
+docker-compose up mongodb mongo-express
 
-echo "MongoDB container started."
+echo "MongoDB and Mongo Express containers started."

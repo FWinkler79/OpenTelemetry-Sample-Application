@@ -3,6 +3,9 @@ spring:
     name: demo
   data:
     mongodb:
-      uri: mongodb://localhost:27017/demo-db
+      database: metrics
+      host: localhost
+      port: 27017
       username: mongo
-      password: mongo 
+      password: mongo
+      authentication-database: admin

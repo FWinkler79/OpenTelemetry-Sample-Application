@@ -55,15 +55,14 @@ public class CustomMetricReader implements MetricReader {
 
     metricData.forEach(metric -> logger.log(Level.INFO, "Metric: " + metric));
 
-    // PersistentMetricRepository persistentMetricRepository = PersistentMetricRepositoryProvider
-    //     .getPersistentMetricRepository();
-    // if (persistentMetricRepository == null) {
-    //   logger.log(Level.WARNING, "PersistentMetricRepository is not initialized");
-    // } else {
-    //   logger.log(Level.INFO, "Saving metrics to persistent storage");
-    //   PersistentMetricData persistentMetricData = new PersistentMetricData(metricData);
-    //   persistentMetricRepository.save(persistentMetricData);
-    // }
+    PersistentMetricRepository persistentMetricRepository = PersistentMetricRepositoryProvider.getPersistentMetricRepository();
+    if (persistentMetricRepository == null) {
+      logger.log(Level.WARNING, "PersistentMetricRepository is not initialized");
+    } else {
+      logger.log(Level.INFO, "Saving metrics to persistent storage");
+      PersistentMetricData persistentMetricData = new PersistentMetricData(metricData);
+      persistentMetricRepository.save(persistentMetricData);
+    }
 
     CompletableResultCode resultCode = exporter.export(metricData);
     // export could be an aysnchronous operation, so we handle the result code when
