@@ -1,13 +1,6 @@
 package com.example.demo.metrics;
 
-import io.opentelemetry.sdk.common.CompletableResultCode;
-import io.opentelemetry.sdk.common.export.MemoryMode;
-import io.opentelemetry.sdk.metrics.Aggregation;
-import io.opentelemetry.sdk.metrics.InstrumentType;
-import io.opentelemetry.sdk.metrics.data.AggregationTemporality;
-import io.opentelemetry.sdk.metrics.export.AggregationTemporalitySelector;
-import io.opentelemetry.sdk.metrics.export.CollectionRegistration;
-import io.opentelemetry.sdk.metrics.export.MetricReader;
+import java.util.Collection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -15,29 +8,56 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import io.opentelemetry.sdk.common.CompletableResultCode;
+import io.opentelemetry.sdk.common.export.MemoryMode;
+import io.opentelemetry.sdk.metrics.Aggregation;
+import io.opentelemetry.sdk.metrics.InstrumentType;
+import io.opentelemetry.sdk.metrics.data.AggregationTemporality;
+import io.opentelemetry.sdk.metrics.data.MetricData;
+import io.opentelemetry.sdk.metrics.export.AggregationTemporalitySelector;
+import io.opentelemetry.sdk.metrics.export.CollectionRegistration;
+import io.opentelemetry.sdk.metrics.export.MetricExporter;
+import io.opentelemetry.sdk.metrics.export.MetricReader;
+
 public class CustomMetricReader implements MetricReader {
 
-  private static final Logger logger = Logger.getLogger(CustomMetricExporter.class.getName());
+  private static final Logger logger = Logger.getLogger(CustomMetricReader.class.getName());
+  private MetricExporter exporter;
 
   private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
   private final AtomicReference<CollectionRegistration> collectionRef =
       new AtomicReference<>(CollectionRegistration.noop());
 
+  public CustomMetricReader(MetricExporter exporter) {
+    this.exporter = exporter; 
+  }
+
   @Override
   public void register(CollectionRegistration collectionRegistration) {
     // Callback invoked when SdkMeterProvider is initialized, providing a handle to collect metrics.
     collectionRef.set(collectionRegistration);
-    executorService.scheduleWithFixedDelay(this::collectMetrics, 0, 60, TimeUnit.SECONDS);
+    executorService.scheduleWithFixedDelay(this::collectMetrics, 0, 5, TimeUnit.SECONDS);
   }
 
   private void collectMetrics() {
     // Collect metrics. Typically, records are sent out of process via some network protocol, but we
     // simply log for illustrative purposes.
     logger.log(Level.INFO, "Collecting metrics");
-    collectionRef
+    Collection<MetricData> metricData = collectionRef
         .get()
-        .collectAllMetrics()
-        .forEach(metric -> logger.log(Level.INFO, "Metric: " + metric));
+        .collectAllMetrics();
+    
+    metricData.forEach(metric -> logger.log(Level.INFO, "Metric: " + metric));
+
+    CompletableResultCode resultCode = exporter.export(metricData);
+    // export could be an aysnchronous operation, so we handle the result code when it is ready.
+    resultCode.whenComplete(() -> {
+      if (!resultCode.isSuccess()) {
+        logger.log(Level.WARNING, "Failed to export metrics: " + resultCode);
+      } else {
+        logger.log(Level.INFO, "Metrics exported successfully");
+      }
+    });
   }
 
   @Override

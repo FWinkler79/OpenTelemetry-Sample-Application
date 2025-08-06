@@ -16,7 +16,9 @@ public class SdkMeterProviderConfig {
                 .registerMetricReader(
                         MetricReaderConfig.periodicMetricReader(
                                 MetricExporterConfig.otlpHttpMetricExporter(
-                                        "http://localhost:4318/v1/metrics")));
+                                        "http://localhost:4318/v1/metrics")))
+                // Register a custom metric reader and exporter.
+                .registerMetricReader(new CustomMetricReader(new CustomMetricExporter()));
                                         
         // Uncomment to optionally register metric reader with cardinality limits
         // builder.registerMetricReader(

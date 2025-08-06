@@ -5,6 +5,6 @@
 set -e
 
 echo "Starting PostgreSQL database using docker-compose..."
-docker-compose up -d postgres
+docker-compose up postgres
 
 echo "PostgreSQL container started."

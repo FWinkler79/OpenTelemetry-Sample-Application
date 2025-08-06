@@ -2,4 +2,4 @@
 set -e
 
 echo "Starting OpenTelemetry Collector using docker-compose..."
-docker-compose up --remove-orphans --force-recreate
+docker-compose up otel-collector
