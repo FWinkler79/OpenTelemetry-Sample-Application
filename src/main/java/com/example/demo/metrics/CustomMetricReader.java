@@ -8,6 +8,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.example.demo.database.PersistentMetricData;
+import com.example.demo.database.PersistentMetricRepository;
+import com.example.demo.database.PersistentMetricRepositoryProvider;
+
 import io.opentelemetry.sdk.common.CompletableResultCode;
 import io.opentelemetry.sdk.common.export.MemoryMode;
 import io.opentelemetry.sdk.metrics.Aggregation;
@@ -25,32 +29,45 @@ public class CustomMetricReader implements MetricReader {
   private MetricExporter exporter;
 
   private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
-  private final AtomicReference<CollectionRegistration> collectionRef =
-      new AtomicReference<>(CollectionRegistration.noop());
+  private final AtomicReference<CollectionRegistration> collectionRef = new AtomicReference<>(
+      CollectionRegistration.noop());
 
   public CustomMetricReader(MetricExporter exporter) {
-    this.exporter = exporter; 
+    this.exporter = exporter;
   }
 
   @Override
   public void register(CollectionRegistration collectionRegistration) {
-    // Callback invoked when SdkMeterProvider is initialized, providing a handle to collect metrics.
+    // Callback invoked when SdkMeterProvider is initialized, providing a handle to
+    // collect metrics.
     collectionRef.set(collectionRegistration);
     executorService.scheduleWithFixedDelay(this::collectMetrics, 0, 5, TimeUnit.SECONDS);
   }
 
   private void collectMetrics() {
-    // Collect metrics. Typically, records are sent out of process via some network protocol, but we
+    // Collect metrics. Typically, records are sent out of process via some network
+    // protocol, but we
     // simply log for illustrative purposes.
     logger.log(Level.INFO, "Collecting metrics");
     Collection<MetricData> metricData = collectionRef
         .get()
         .collectAllMetrics();
-    
+
     metricData.forEach(metric -> logger.log(Level.INFO, "Metric: " + metric));
 
+    // PersistentMetricRepository persistentMetricRepository = PersistentMetricRepositoryProvider
+    //     .getPersistentMetricRepository();
+    // if (persistentMetricRepository == null) {
+    //   logger.log(Level.WARNING, "PersistentMetricRepository is not initialized");
+    // } else {
+    //   logger.log(Level.INFO, "Saving metrics to persistent storage");
+    //   PersistentMetricData persistentMetricData = new PersistentMetricData(metricData);
+    //   persistentMetricRepository.save(persistentMetricData);
+    // }
+
     CompletableResultCode resultCode = exporter.export(metricData);
-    // export could be an aysnchronous operation, so we handle the result code when it is ready.
+    // export could be an aysnchronous operation, so we handle the result code when
+    // it is ready.
     resultCode.whenComplete(() -> {
       if (!resultCode.isSuccess()) {
         logger.log(Level.WARNING, "Failed to export metrics: " + resultCode);
@@ -83,7 +100,8 @@ public class CustomMetricReader implements MetricReader {
 
   @Override
   public MemoryMode getMemoryMode() {
-    // Optionally specify the memory mode, indicating whether metric records can be reused or must
+    // Optionally specify the memory mode, indicating whether metric records can be
+    // reused or must
     // be immutable
     return MemoryMode.REUSABLE_DATA;
   }

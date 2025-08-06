@@ -14,11 +14,12 @@ public class HelloWorldController {
     private static final Meter meter = GlobalOpenTelemetry.getMeter("com.example.demo");
     private final LongCounter apiCallCounter;
 
+
     public HelloWorldController() {
         // Example: create a counter
         apiCallCounter = meter.counterBuilder("hello_world_counter").build();
     }
-    
+
     @GetMapping("/test/helloWorld")
     public String helloWorld(@RequestParam(value = "message", required = false) String message) {
         apiCallCounter.add(1);
