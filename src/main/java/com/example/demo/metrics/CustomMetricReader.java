@@ -49,22 +49,26 @@ public class CustomMetricReader implements MetricReader {
     // protocol, but we
     // simply log for illustrative purposes.
     logger.log(Level.INFO, "Collecting metrics");
-    Collection<MetricData> metricData = collectionRef
+    Collection<MetricData> metricDataCollection = collectionRef
         .get()
         .collectAllMetrics();
 
-    metricData.forEach(metric -> logger.log(Level.INFO, "Metric: " + metric));
+    
 
     PersistentMetricRepository persistentMetricRepository = PersistentMetricRepositoryProvider.getPersistentMetricRepository();
     if (persistentMetricRepository == null) {
       logger.log(Level.WARNING, "PersistentMetricRepository is not initialized");
     } else {
       logger.log(Level.INFO, "Saving metrics to persistent storage");
-      PersistentMetricData persistentMetricData = new PersistentMetricData(metricData);
-      persistentMetricRepository.save(persistentMetricData);
+      metricDataCollection.forEach(metric -> {
+        logger.log(Level.INFO, "Metric: " + metric);
+        PersistentMetricData persistentMetricData = new PersistentMetricData();
+        persistentMetricData.setMetricData(metric);
+        persistentMetricRepository.save(persistentMetricData);
+      });
     }
 
-    CompletableResultCode resultCode = exporter.export(metricData);
+    CompletableResultCode resultCode = exporter.export(metricDataCollection);
     // export could be an aysnchronous operation, so we handle the result code when
     // it is ready.
     resultCode.whenComplete(() -> {

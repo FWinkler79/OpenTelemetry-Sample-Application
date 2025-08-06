@@ -12,16 +12,42 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.example.demo.database.PersistentMetricData;
+import com.example.demo.database.PersistentMetricRepository;
+import com.example.demo.database.PersistentMetricRepositoryProvider;
+
 public class CustomMetricExporter implements MetricExporter {
 
   private static final Logger logger = Logger.getLogger(CustomMetricExporter.class.getName());
 
   @Override
   public CompletableResultCode export(Collection<MetricData> metrics) {
-    // Export the records. Typically, records are sent out of process via some network protocol, but
+    // Export the records. Typically, records are sent out of process via some
+    // network protocol, but
     // we simply log for illustrative purposes.
-    logger.log(Level.INFO, "Exporting metrics");
-    metrics.forEach(metric -> logger.log(Level.INFO, "Metric: " + metric));
+
+    PersistentMetricRepository persistentMetricRepository = PersistentMetricRepositoryProvider
+        .getPersistentMetricRepository();
+    if (persistentMetricRepository == null) {
+      logger.log(Level.WARNING, "PersistentMetricRepository is not initialized");
+    } else {
+      logger.log(Level.INFO, "Reading metrics from persistent storage");
+
+      new Thread(new Runnable() {
+        @Override
+        public void run() {
+          Iterable<PersistentMetricData> persistentMetrics = persistentMetricRepository.findAll();
+          persistentMetrics.forEach(persistentMetricData -> {
+            MetricData metricData = persistentMetricData.getMetricData();
+            logger.log(Level.INFO, "Exporting Metric: " + metricData);
+          });
+        }
+      }).start();
+    }
+
+    // logger.log(Level.INFO, "Exporting metrics");
+    // metrics.forEach(metric -> logger.log(Level.INFO, "Metric: " + metric));
+
     return CompletableResultCode.ofSuccess();
   }
 
@@ -48,7 +74,8 @@ public class CustomMetricExporter implements MetricExporter {
 
   @Override
   public MemoryMode getMemoryMode() {
-    // Optionally specify the memory mode, indicating whether metric records can be reused or must
+    // Optionally specify the memory mode, indicating whether metric records can be
+    // reused or must
     // be immutable
     return MemoryMode.REUSABLE_DATA;
   }
