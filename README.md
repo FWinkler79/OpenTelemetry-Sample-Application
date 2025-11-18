@@ -22,6 +22,7 @@ The way how this was done is described by [Manage Telemetry with the SDK](https:
 
 In this proof-of-concept we investigate the use of a custom `MetricReader` implementation to retrieve metrics from in-memory state, serialize it to temporary storage and using a `MetricExporter` de-serialize metrics from temporary storage to then send them to a nearby OTel collector.
 The intention behind that is to increase resiliency against crashing applications or unavailability of downstream metrics backends to make sure that metrics delivery to downstream systems can be guaranteed to a reasonable degree.
+This is not yet [OpenTelemetry Java Contrib - Disk Buffering of Spans, Logs, Metrics](https://github.com/open-telemetry/opentelemetry-java-contrib/tree/main/disk-buffering), which may be worthwhile investigating.
 
 ## Inspirations from OpenTelemetry's Default Implementations
 
@@ -38,3 +39,4 @@ The intention behind that is to increase resiliency against crashing application
 * [MeterProvider](https://opentelemetry.io/docs/specs/otel/metrics/sdk/#meterprovider)
 * [MetricProducer](https://opentelemetry.io/docs/specs/otel/metrics/sdk/#metricproducer)
 * [Dependencies and BOMs](https://opentelemetry.io/docs/languages/java/intro/#dependencies-and-boms)
+* [OpenTelemetry Java Contrib - Disk Buffering of Spans, Logs, Metrics](https://github.com/open-telemetry/opentelemetry-java-contrib/tree/main/disk-buffering)
