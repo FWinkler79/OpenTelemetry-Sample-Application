@@ -1,4 +1,4 @@
-# OpenTelemetry-Sample-Application
+# OpenTelemetry Custom Metric Handling
 
 This project shows how to configure the OpenTelemetry SDK programmatically.
 
